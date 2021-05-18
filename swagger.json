@@ -1,0 +1,224 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "IMDB REST API",
+    "version": "0.1.0",
+    "description": "testet"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Dev server"
+    }
+  ],
+  "paths": {
+    "/api/v1/actors": {
+      "get": {
+        "tags": ["Actors"],
+        "description": "Obtener todos los actores",
+        "responses": {
+          "200": {
+            "description": "Una array de actores"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Actors"],
+        "description": "Crear un actor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref":  "#/components/schemas/Actors"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Actor creado exitosamente"
+          }
+        }
+      }
+    },
+    "/api/v1/actors/{id}": {
+      "put":{
+        "tags": ["Actors"],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          },
+          "description": "Actor ID"
+        }],
+        "description": "Update an actor",
+        "requestBody":{
+          "content": {
+            "application/json":{
+              "schema": {
+                "$ref":  "#/components/schemas/Actors"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200":{
+            "description": "Actor updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Actors"],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "description": "Actor ID",
+          "schema": {
+            "type": "integer"
+          }
+        }],
+        "description": "Delete an actor",
+        "responses": {
+          "200": {
+            "description": "Deleted"
+          }
+        }
+      }
+    },
+    "/api/v1/directors": {
+      "get": {
+        "tags": ["Directors"],
+        "description": "Obtener todos los directores",
+        "responses": {
+          "200": {
+            "description": "Array con todos los directores"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Directors"],
+        "description": "Agregar un nuevo directo",
+        "requestBody": {
+          "content": {
+             "application/json": {
+               "schema": {
+                 "$ref": "#/components/schemas/Directors"
+               }
+             }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Director creado"
+          }
+        }
+      }
+    },
+    "/api/v1/directors/{id}":{
+      "put": {
+        "tags": ["Directors"],
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "description": "Director ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }],
+        "description": "Actualizar director",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Directors"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Actualizado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Directors"],
+        "description": "Eliminar un Director",
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "description": "Director ID",
+          "schema": {
+            "type": "integer"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Director eliminado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Actors": {
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "dob": {
+            "type": "date",
+            "description": "Date of birth",
+            "example": "1990-09-02"
+          },
+          "biography": {
+            "type": "string"
+          },
+          "profile_photo": {
+            "type": "string",
+            "description": "image url",
+            "example": "https://picsum.photos/200/300"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Directors": {
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "dob": {
+            "type": "date",
+            "description": "Date of birth",
+            "example": "1990-09-02"
+          },
+          "biography": {
+            "type": "string"
+          },
+          "profile_photo": {
+            "type": "string",
+            "description": "image url",
+            "example": "https://picsum.photos/200/300"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
