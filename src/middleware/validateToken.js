@@ -1,17 +1,18 @@
 const jwt = require('jsonwebtoken');
 
 function validateToken(req, res, next) {
-  const token = req.headers['acces-token'];
+  let token = req.headers['authorization'];
   if(token) {
+    token = token.replace(/^Bearer\s+/, "");
     jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
+
       if(err) {
         res.status(404);
-        res.json(err);
+        res.json({error: err})
+        next(err);
       } else {
-        res.status(200);
-        res.json({decoded});
-        console.log(decoded);
-        next();
+        req.decoded = decoded;
+        next()
       }
     });
   } else {

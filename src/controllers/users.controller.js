@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 function getAll(req, res, next) {
   Users.findAll({ raw: true })
     .then(response => {
-      
       res.status(200);
       console.log(response);
       res.json({users: response});
@@ -16,19 +15,48 @@ function getAll(req, res, next) {
 };
   
 function createUser(req, res, next) {
-  const { first_name, last_name, email, password, reset_token, active } = req.body;
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) =>{
-      Users.create({ first_name, last_name, email, password: hash, reset_token, active })
+  const { first_name, last_name, email, password, dob, active, profile_photo } = req.body;
+    bcrypt.hash(password, 8, (err, hash) =>{
+      Users.create({ first_name, last_name, email, password: hash, active, dob, profile_photo })
         .then(response => {
           res.status(200);
           res.json({users: response});
-        })
+        }) 
         .catch(err => next(err));
     });
-  });
-  // console.log(req.body);
   return;
+};
+
+function updateUser(req, res, next) {
+  const { first_name, last_name, email, password, active } = req.body;
+  const id = req.params.id;
+  console.log(req.body, req.params);
+
+  bcrypt.hash(password, 8, (err, hash) =>{
+      Users.update({ first_name, last_name, email, password: hash, active }, {where: {id}})
+        .then(response => {
+          console.log(response);
+          res.status(200);
+          res.json({users: response});
+        }) 
+        .catch(err => next(err));
+    });
+  return;
+};
+
+function deleteUser(req, res, next) {
+  const id = req.params.id;
+  console.log(id);
+  Users.destroy({ where: { id } })
+    .then(reponse => {
+      res.status(200);
+      res.json({message: 'User Deleted'});
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(404);
+      res.json({err});
+    })
 };
 
 function authUser(req, res, next) {
@@ -40,6 +68,7 @@ function authUser(req, res, next) {
       if(response.length){
         bcrypt.compare(password, response[0].password)
           .then((resCompare) => {
+            if(!resCompare) throw 'user or password';
             jwt.sign(response[0], process.env.JWT_KEY, {algorithm: 'HS512', expiresIn: '1h'}, (err, token) =>{
               res.status(200);
               res.json({token});
@@ -65,5 +94,7 @@ function authUser(req, res, next) {
 module.exports = {
   getAll,
   createUser,
+  updateUser,
+  deleteUser,
   authUser
 }

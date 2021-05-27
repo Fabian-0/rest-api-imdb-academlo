@@ -23,6 +23,12 @@ module.exports = {
       reset_token: {
         type: Sequelize.STRING
       },
+      dob: {
+        type: Sequelize.DATE
+      },
+      profile_photo: {
+        type: Sequelize.STRING
+      },
       active: {
         type: Sequelize.BOOLEAN
       },

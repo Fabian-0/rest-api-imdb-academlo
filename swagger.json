@@ -20,7 +20,12 @@
           "200": {
             "description": "Una array de actores"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "post": {
         "tags": ["Actors"],
@@ -38,7 +43,12 @@
           "201": {
             "description": "Actor creado exitosamente"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/v1/actors/{id}": {
@@ -67,7 +77,12 @@
           "200":{
             "description": "Actor updated"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Actors"],
@@ -85,7 +100,12 @@
           "200": {
             "description": "Deleted"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/v1/directors": {
@@ -96,7 +116,12 @@
           "200": {
             "description": "Array con todos los directores"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "post": {
         "tags": ["Directors"],
@@ -114,7 +139,12 @@
           "201": {
             "description": "Director creado"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/v1/directors/{id}":{
@@ -143,7 +173,12 @@
           "200": {
             "description": "Actualizado"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Directors"],
@@ -161,11 +196,162 @@
           "200": {
             "description": "Director eliminado"
           }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/login": {
+      "post": {
+        "tags": ["Login"],
+        "description": "Iniciar sesion",
+        "responses": {
+          "200": {
+            "description": "Token"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "email": "example@domain.com",
+                  "password": "password"
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/api/v1/register": {
+      "post": {
+        "tags": ["Register"],
+        "description": "Registrar Usuario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created!"
+          }
+        }
+      }
+    },
+    "/api/v1/users":{
+      "get": {
+        "tags": ["Users"],
+        "description": "Obtener usuarios",
+        "responses": {
+          "200": {
+            "description": "Arreglo de usuarios"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Users"],
+        "description": "Crear Usuario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created!"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "put": {
+        "tags": ["Users"],
+        "description": "Agreagar Usuario",
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "description": "Usuario ID",
+          "schema": {
+            "type": "integer"
+          }
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created!"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Users"],
+        "description": "Eliminar un Usuario",
+        "parameters": [{
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "description": "Usuario ID",
+          "schema": {
+            "type": "integer"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "Actors": {
         "properties": {
@@ -208,6 +394,39 @@
           },
           "biography": {
             "type": "string"
+          },
+          "profile_photo": {
+            "type": "string",
+            "description": "image url",
+            "example": "https://picsum.photos/200/300"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Users": {
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "email",
+            "example": "examle@gmail.com"
+          },
+          "password": {
+            "type": "string"
+          },
+          "reset_token": {
+            "type": "string"
+          },
+          "dob": {
+            "type": "date",
+            "description": "Date of birth",
+            "example": "1990-09-02"
           },
           "profile_photo": {
             "type": "string",
